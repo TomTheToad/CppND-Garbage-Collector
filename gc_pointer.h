@@ -148,10 +148,32 @@ Pointer<T, size>::~Pointer(){
 template <class T, int size>
 bool Pointer<T, size>::collect(){
 
-    // TODO: Implement collect function
-    // LAB: New and Delete Project Lab
-    // Note: collect() will be called in the destructor
-    return false;
+    // MARK: Collection Implementation
+    bool memfreed = false;
+    typename std::list<PtrDetails<T>>::iterator p;
+
+    do {
+        for (p = refContainer.begin(); p != refContainer.end(); p++) {
+            if (p->refcount > 0) {
+                continue;
+            }
+
+            memfreed = true;
+            refContainer.remove(*p);
+
+            if(p->memPtr) {
+                if (p->isArray) {
+                    delete[] p->memPtr;
+                } else {
+                    delete p->memPtr;
+                }
+            }
+            break;
+        }
+    }
+
+    while (p != refContainer.end());
+    return memfreed;
 }
 
 // Overload assignment of pointer to Pointer.
