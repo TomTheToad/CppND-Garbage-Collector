@@ -114,8 +114,18 @@ Pointer<T,size>::Pointer(T *t){
 template< class T, int size>
 Pointer<T,size>::Pointer(const Pointer &ob){
 
-    // TODO: Implement Pointer constructor
-    // Lab: Smart Pointer Project Lab
+    // MARK: Pointer Constructor Implementation
+    typename std::list<PtrDetails<T> >::iterator p;
+    p = findPtrInfo(ob.addr);
+
+    // Increment ref count
+    p->refcount++;
+
+    // Save memory address for later use
+    addr = ob.addr;
+
+    // Check for array
+    isArray = ((ob.arraySize > 0) ? true : false);
 
 }
 
