@@ -42,29 +42,36 @@ public:
         Pointer(NULL);
     }
     Pointer(T*);
+
     // Copy constructor.
     Pointer(const Pointer &);
+
     // Destructor for Pointer.
     ~Pointer();
     // Collect garbage. Returns true if at least
     // one object was freed.
+
     static bool collect();
     // Overload assignment of pointer to Pointer.
     T *operator=(T *t);
     // Overload assignment of Pointer to Pointer.
+
     Pointer &operator=(Pointer &rv);
     // Return a reference to the object pointed
     // to by this Pointer.
     T &operator*(){
         return *addr;
     }
+
     // Return the address being pointed to.
     T *operator->() { return addr; }
     // Return a reference to the object at the
     // index specified by i.
+
     T &operator[](int i){ return addr[i];}
     // Conversion function to T *.
     operator T *() { return addr; }
+
     // Return an Iter to the start of the allocated memory.
     Iter<T> begin(){
         int _size;
@@ -95,6 +102,7 @@ public:
 // Creates storage for the static variables
 template <class T, int size>
 std::list<PtrDetails<T> > Pointer<T, size>::refContainer;
+
 template <class T, int size>
 bool Pointer<T, size>::first = true;
 
@@ -108,6 +116,20 @@ Pointer<T,size>::Pointer(T *t){
 
     // TODO: Implement Pointer constructor
     // Lab: Smart Pointer Project Lab
+    Pointer<T> p = new T(t);
+
+    // TODO: is this necessary here?
+    p->refcount++;
+
+    // TODO: who get the address?
+    p->addr = p.addr;
+
+    // Check for array
+    isArray = ((p.arraySize > 0) ? true : false);
+
+    // TODO: What else is missing?
+    // 1) check for existence of pointer?
+
 
 }
 // Copy constructor.
@@ -122,6 +144,7 @@ Pointer<T,size>::Pointer(const Pointer &ob){
     p->refcount++;
 
     // Save memory address for later use
+    // TODO: should this be saved to the new instance?
     addr = ob.addr;
 
     // Check for array
