@@ -31,5 +31,5 @@ class PtrDetails
 // This is needed by the STL list class.
 template <class T>
 bool operator==(const PtrDetails<T> &ob1, const PtrDetails<T> &ob2) {
-    return ((ob1.memPtr == obj2.memPtr) ? true : false);
+    return ((ob1.memPtr == ob2.memPtr) ? true : false);
 }
