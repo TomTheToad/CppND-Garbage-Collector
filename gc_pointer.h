@@ -54,8 +54,8 @@ public:
     static bool collect();
     // Overload assignment of pointer to Pointer.
     T *operator=(T *t);
-    // Overload assignment of Pointer to Pointer.
 
+    // Overload assignment of Pointer to Pointer.
     Pointer &operator=(Pointer &rv);
     // Return a reference to the object pointed
     // to by this Pointer.
@@ -114,22 +114,32 @@ Pointer<T,size>::Pointer(T *t){
         atexit(shutdown);
     first = false;
 
-    // TODO: Implement Pointer constructor
+    // MARK: Implement Pointer constructor
     // Lab: Smart Pointer Project Lab
-    Pointer<T> p = new T(t);
+    // typename std::list<PtrDetails<T> >::iterator p;
 
-    // TODO: is this necessary here?
+    // Check to see if ptr address already exists in ref container
+    PtrDetails<T> p = findPtrInfo(t);
+
+    // Check for null
+    if (!p) {
+        // If null, create new instance
+        p = new T(t);
+    }
+
+    // increase ref count by one
     p->refcount++;
 
-    // TODO: who get the address?
-    p->addr = p.addr;
+    // set address attribute
+    addr = t;
 
-    // Check for array
+    // Check for array and set attribute
     isArray = ((p.arraySize > 0) ? true : false);
 
-    // TODO: What else is missing?
-    // 1) check for existence of pointer?
-
+    // If not already in ref container add
+    if (!findPtrInfo(p.memPtr)) {
+        refContainer.push_back(p);
+    }
 
 }
 // Copy constructor.
@@ -144,7 +154,7 @@ Pointer<T,size>::Pointer(const Pointer &ob){
     p->refcount++;
 
     // Save memory address for later use
-    // TODO: should this be saved to the new instance?
+    // should this be saved to the new instance?
     addr = ob.addr;
 
     // Check for array
