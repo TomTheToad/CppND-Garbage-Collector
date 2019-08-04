@@ -122,9 +122,9 @@ Pointer<T,size>::Pointer(T *t){
     typename std::list<PtrDetails<T> >::iterator p = findPtrInfo(t);
 
     // Check for null
-    if (!p) {
+    if (p == refContainer.end()) {
         // If null, create new instance
-        p = new T(t);
+        auto p = new T(*t);
     }
 
     // increase ref count by one
@@ -134,11 +134,11 @@ Pointer<T,size>::Pointer(T *t){
     addr = p->memPtr;
 
     // Check for array and set attribute
-    isArray = ((p.arraySize > 0) ? true : false);
+    isArray = ((p->arraySize > 0) ? true : false);
 
     // If not already in ref container add
-    if (!findPtrInfo(p.memPtr)) {
-        refContainer.push_back(p);
+    if ((findPtrInfo(addr)) == (refContainer.end())) {
+        refContainer.push_back(addr);
     }
 
 }
@@ -216,6 +216,7 @@ T *Pointer<T, size>::operator=(T *t){
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
     // PtrDetails<T> p;
+    typename std::list<PtrDetails<T> >::iterator p;
 
     // decrement current
     p = findPtrInfo(addr);
@@ -223,17 +224,17 @@ T *Pointer<T, size>::operator=(T *t){
 
     // Check for already existing new pointer
     // create
-    if (p = findPtrInfo(t)) {
-        addr = p.memPtr;
-        arraySize = p.arraySize;
-        isArray = p.isArray;
+    if ((p = findPtrInfo(t)) != refContainer.end()) {
+        addr = t;
+        arraySize = p->arraySize;
+        isArray = p->isArray;
         p->refcount++;
     } else {
-        addr = p.memPtr;
-        arraySize = p.arraySize;
-        isArray = p.isArray;
-        p->refcount++;
-        refContainer.push_back(p);
+        addr = t;
+        // arraySize = p.arraySize;
+        // isArray = p.isArray;
+        // p->refcount++;
+        refContainer.push_back(addr);
     }
 
 }
@@ -243,6 +244,7 @@ Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
+    typename std::list<PtrDetails<T> >::iterator p;
 
     // decrement current
     p = findPtrInfo(addr);
