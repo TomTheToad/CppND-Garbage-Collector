@@ -116,10 +116,10 @@ Pointer<T,size>::Pointer(T *t){
 
     // MARK: Implement Pointer constructor
     // Lab: Smart Pointer Project Lab
-    // typename std::list<PtrDetails<T> >::iterator p;
-
     // Check to see if ptr address already exists in ref container
-    PtrDetails<T> p = findPtrInfo(t);
+    // ?? Does the iterator return a single instance or a list?
+    // Assuming an instance based on given code.
+    typename std::list<PtrDetails<T> >::iterator p = findPtrInfo(t);
 
     // Check for null
     if (!p) {
@@ -131,7 +131,7 @@ Pointer<T,size>::Pointer(T *t){
     p->refcount++;
 
     // set address attribute
-    addr = t;
+    addr = p->memPtr;
 
     // Check for array and set attribute
     isArray = ((p.arraySize > 0) ? true : false);
@@ -215,6 +215,26 @@ T *Pointer<T, size>::operator=(T *t){
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
+    // PtrDetails<T> p;
+
+    // decrement current
+    p = findPtrInfo(addr);
+    p->refcount--;
+
+    // Check for already existing new pointer
+    // create
+    if (p = findPtrInfo(t)) {
+        addr = p.memPtr;
+        arraySize = p.arraySize;
+        isArray = p.isArray;
+        p->refcount++;
+    } else {
+        addr = p.memPtr;
+        arraySize = p.arraySize;
+        isArray = p.isArray;
+        p->refcount++;
+        refContainer.push_back(p);
+    }
 
 }
 // Overload assignment of Pointer to Pointer.
@@ -223,6 +243,19 @@ Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
+
+    // decrement current
+    p = findPtrInfo(addr);
+    p->refcount--;
+    
+    // new address
+    // ?? Does this just replace the address of the current pointer?
+    p = findPtrInfo(rv.addr);
+
+    addr = rv.addr;
+    p->refcount++;
+
+    // ?? is this method supposed to return something?
 
 }
 
