@@ -125,6 +125,8 @@ Pointer<T,size>::Pointer(T *t){
     if (p == refContainer.end()) {
         // If null, create new instance
         auto p = new T(*t);
+        // If not already in ref container add
+        refContainer.push_back(addr);
     }
 
     // increase ref count by one
@@ -135,11 +137,6 @@ Pointer<T,size>::Pointer(T *t){
 
     // Check for array and set attribute
     isArray = ((p->arraySize > 0) ? true : false);
-
-    // If not already in ref container add
-    if ((findPtrInfo(addr)) == (refContainer.end())) {
-        refContainer.push_back(addr);
-    }
 
 }
 // Copy constructor.
@@ -238,6 +235,7 @@ T *Pointer<T, size>::operator=(T *t){
     }
 
 }
+
 // Overload assignment of Pointer to Pointer.
 template <class T, int size>
 Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
