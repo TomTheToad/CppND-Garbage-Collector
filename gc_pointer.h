@@ -133,10 +133,11 @@ Pointer<T,size>::Pointer(T *t){
     p->refcount++;
 
     // set address attribute
-    addr = p->memPtr;
+    addr = t;
 
-    // Check for array and set attribute
-    isArray = ((p->arraySize > 0) ? true : false);
+    // Check for array and set attributes
+    arraySize = size;
+    isArray = ((arraySize > 0) ? true : false);
 
 }
 // Copy constructor.
@@ -144,8 +145,7 @@ template< class T, int size>
 Pointer<T,size>::Pointer(const Pointer &ob){
 
     // MARK: Pointer Constructor Implementation
-    typename std::list<PtrDetails<T> >::iterator p;
-    p = findPtrInfo(ob.addr);
+    typename std::list<PtrDetails<T> >::iterator p = findPtrInfo(ob.addr);
 
     // Increment ref count
     p->refcount++;
@@ -153,6 +153,9 @@ Pointer<T,size>::Pointer(const Pointer &ob){
     // Save memory address for later use
     // should this be saved to the new instance?
     addr = ob.addr;
+
+    // set array size
+    arraySize = ob.arraySize;
 
     // Check for array
     isArray = ((ob.arraySize > 0) ? true : false);
