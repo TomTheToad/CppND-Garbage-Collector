@@ -124,9 +124,11 @@ Pointer<T,size>::Pointer(T *t){
     // Check for null
     if (p == refContainer.end()) {
         // If null, create new instance
-        auto p = new T(*t);
+        PtrDetails<T> new_p(t, size);
         // If not already in ref container add
-        refContainer.push_back(addr);
+        refContainer.push_back(new_p);
+    } else {
+        
     }
 
     // increase ref count by one
@@ -215,7 +217,6 @@ T *Pointer<T, size>::operator=(T *t) {
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
-    // PtrDetails<T> p;
     typename std::list<PtrDetails<T> >::iterator p = findPtrInfo(addr);
 
     // decrement current ref if found
@@ -225,9 +226,9 @@ T *Pointer<T, size>::operator=(T *t) {
     p = findPtrInfo(t);
     if (p == refContainer.end()) {
         // If null, create new instance
-        auto p = new T(*t);
+        PtrDetails<T> new_p(t, size);
         // If not already in ref container add
-        refContainer.push_back(addr);
+        refContainer.push_back(new_p);
     }
 
     // set various parameters
