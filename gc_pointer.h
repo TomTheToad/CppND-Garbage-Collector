@@ -215,8 +215,7 @@ bool Pointer<T, size>::collect(){
 template <class T, int size>
 T *Pointer<T, size>::operator=(T *t) {
 
-    // TODO: Implement operator==
-    // LAB: Smart Pointer Project Lab
+    // MARK: Implement operator==
     typename std::list<PtrDetails<T> >::iterator p = findPtrInfo(addr);
 
     // decrement current ref if found
@@ -243,8 +242,7 @@ T *Pointer<T, size>::operator=(T *t) {
 template <class T, int size>
 Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
 
-    // TODO: Implement operator==
-    // LAB: Smart Pointer Project Lab
+    // MARK: Implement operator==
     typename std::list<PtrDetails<T> >::iterator p;
 
     // decrement current
@@ -252,7 +250,6 @@ Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
     p->refcount--;
     
     // new address
-    // ?? Does this just replace the address of the current pointer?
     p = findPtrInfo(rv.addr);
     addr = rv.addr;
     arraySize = rv.arraySize;
