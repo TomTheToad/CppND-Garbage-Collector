@@ -211,31 +211,30 @@ bool Pointer<T, size>::collect(){
 
 // Overload assignment of pointer to Pointer.
 template <class T, int size>
-T *Pointer<T, size>::operator=(T *t){
+T *Pointer<T, size>::operator=(T *t) {
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
     // PtrDetails<T> p;
-    typename std::list<PtrDetails<T> >::iterator p;
+    typename std::list<PtrDetails<T> >::iterator p = findPtrInfo(addr);
 
-    // decrement current
-    p = findPtrInfo(addr);
-    p->refcount--;
+    // decrement current ref if found
+    if (p != refContainer.end()) { p->refcount--; }
 
-    // Check for already existing new pointer
-    // create
-    if ((p = findPtrInfo(t)) != refContainer.end()) {
-        addr = t;
-        arraySize = p->arraySize;
-        isArray = p->isArray;
-        p->refcount++;
-    } else {
-        addr = t;
-        // arraySize = p.arraySize;
-        // isArray = p.isArray;
-        // p->refcount++;
+    // Check if new pointer address is already in container
+    p = findPtrInfo(t);
+    if (p == refContainer.end()) {
+        // If null, create new instance
+        auto p = new T(*t);
+        // If not already in ref container add
         refContainer.push_back(addr);
     }
+
+    // set various parameters
+    addr = t;
+    arraySize = size;
+    isArray = (arraySize > 0) ? true : false;
+    p->refcount++;
 
 }
 
@@ -254,11 +253,10 @@ Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
     // new address
     // ?? Does this just replace the address of the current pointer?
     p = findPtrInfo(rv.addr);
-
     addr = rv.addr;
+    arraySize = rv.arraySize;
+    isArray = (arraySize > 0) ? true : false;
     p->refcount++;
-
-    // ?? is this method supposed to return something?
 
 }
 
